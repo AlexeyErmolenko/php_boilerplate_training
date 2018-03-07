@@ -1,0 +1,100 @@
+.footer {
+    padding-top: 6px;
+    padding-bottom: 10px;
+
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+
+    background-color: #1A1A1A;
+
+    @include below($tablet) {
+        padding-top: 20px;
+        padding-bottom: 15px;
+
+        text-align: center;
+    }
+
+    &__inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        @include below($tablet) {
+            flex-direction: column;
+        }
+    }
+
+    &__copyright {
+        @include below($tablet) {
+            margin-bottom: 15px;
+        }
+    }
+
+    &__nav {
+        display: flex;
+        align-items: center;
+
+        @include below($mobile) {
+            flex-direction: column;
+            width: 100%;
+        }
+    }
+
+    &__list {
+        //@include list-reset;
+
+        display: flex;
+        align-items: center;
+
+        @include below($mobile) {
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+    }
+
+    &__logo-wrap {
+        margin-left: 52px;
+        width: 225px;
+
+        @include below($desktop) {
+            margin-left: 30px;
+        }
+
+        @include below($tablet) {
+            width: 160px;
+        }
+
+        @include below($mobile) {
+            margin-left: 0;
+        }
+    }
+
+    &__logo {
+        width: 100%;
+    }
+
+    &__item {
+        &:not(:first-child) {
+            margin-left: 90px;
+        }
+
+        @include below($desktop) {
+            &:not(:first-child) {
+                margin-left: 30px;
+            }
+        }
+
+        @include below($mobile) {
+            &:not(:first-child) {
+                margin-left: 0;
+            }
+        }
+    }
+
+    &__link {
+        color: inherit;
+        text-decoration: none;
+    }
+}

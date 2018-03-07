@@ -1,0 +1,65 @@
+version: '2.1'
+services:
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.local
+      args:
+        hostUID: 1000
+        hostGID: 1000
+    image: boilerplate_training-web
+    hostname: boilerplate_training-web
+    container_name: boilerplate_training-web
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      APP_ENV: local
+      PHP_IDE_CONFIG: serverName=boilerplate_training.docker
+      COMPOSER_HOME: /home/www/.composer
+    labels:
+      SERVICE_NAME: boilerplate_training-web
+      SERVICE_80_NAME: boilerplate_training-web
+      SERVICE_443_NAME: boilerplate_training-web
+    volumes:
+    - .:/home/www/app
+    - ~/.composer:/home/www/.composer
+
+  db:
+    image: mysql:5.7
+    hostname: boilerplate_training-db
+    container_name: boilerplate_training-db
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: boilerplate_training
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    labels:
+      SERVICE_NAME: boilerplate_training-db
+    healthcheck:
+      test: "/usr/bin/mysql --user=user --password=secret --execute \"SHOW DATABASES;\""
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:alpine
+    container_name: boilerplate_training-redis
+    labels:
+      SERVICE_NAME: boilerplate_training-redis
+
+  build-static:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.nodejs
+    image: boilerplate_training-nodejs
+    hostname: boilerplate_training-nodejs
+    container_name: boilerplate_training-nodejs
+    mem_limit: 536870912
+#    user: node
+    volumes:
+    - ./:/home/www/app/
+    command: /bin/sh -c 'sh /static_build.sh'
